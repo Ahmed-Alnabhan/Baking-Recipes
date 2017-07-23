@@ -1,0 +1,23 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="expandedToolBar" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">@dimen/txt_size_42_sp</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="collapsedToolBar" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">@dimen/txt_size_18_sp</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+</resources>

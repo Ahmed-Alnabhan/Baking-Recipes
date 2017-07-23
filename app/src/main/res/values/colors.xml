@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="recipe_card_color">#FFC7B3</color>
+    <color name="title_bg_color">#55000000</color>
+    <color name="title_color">#FFEB3B</color>
+    <color name="data_color">#D80027</color>
+    <color name="redish_brown">#662221</color>
+    <color name="greenish">#BFD0D7</color>
+    <color name="dark_green">#004D40</color>
+    <color name="transparent_black_bk">#CC000000</color>
+</resources>

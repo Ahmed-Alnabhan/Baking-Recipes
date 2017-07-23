@@ -1,0 +1,43 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ing_list"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/greenish"
+    android:padding="@dimen/widget_margin">
+
+
+    <ImageView
+        android:id="@+id/cake_image"
+        android:layout_width="80dp"
+        android:layout_height="100dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/cake" />
+
+    <TextView
+        android:id="@+id/recipe_title_widget"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/cake_image"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"
+        android:padding="@dimen/dimen_8_dp"
+        android:textColor="@color/title_color"
+        android:background="@color/title_bg_color"
+        tools:text="Recipe Name" />
+
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/widget_ingredients_list"
+        android:orientation="vertical">
+
+    </LinearLayout>
+</LinearLayout>
