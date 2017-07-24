@@ -4,12 +4,14 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.elearnna.www.bakingapp.R;
 import com.elearnna.www.bakingapp.activities.RecipeDetailActivity;
 import com.elearnna.www.bakingapp.activities.RecipeListActivity;
@@ -25,6 +27,7 @@ import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
+import java.net.URLConnection;
 import java.util.ArrayList;
 
 /**
@@ -52,6 +55,11 @@ public class RecipeDetailFragment extends Fragment {
     private ImageView prevBtn;
     private int position;
     private ImageView noVideo;
+    private ImageView thumbnail;
+    private boolean isVideo;
+    private boolean isImage;
+    private String videoUrl;
+    private String strThumbnailURL;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -88,11 +96,13 @@ public class RecipeDetailFragment extends Fragment {
         noVideo = (ImageView) rootView.findViewById(R.id.no_video);
         nextBtn = (ImageView) rootView.findViewById(R.id.next_btn);
         prevBtn = (ImageView) rootView.findViewById(R.id.previous_btn);
-        // Show the dummy content as text in a TextView.
+        thumbnail = (ImageView) rootView.findViewById(R.id.thumbnail_url);
+        stepTxt = (TextView) rootView.findViewById(R.id.recipe_detail);
+        // Show the d content as text in a TextView.
         if (mItem != null) {
-            stepTxt = (TextView) rootView.findViewById(R.id.recipe_detail);
-            stepTxt.setText(mItem.getDescription());
-            initializePlayer(Uri.parse(mItem.getVideoURL()));
+            placeExoPlayer();
+            placeRecipeDescription();
+            placeRecipeThumbnail();
         }
 
         if (RecipeDetailFragment.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -112,7 +122,9 @@ public class RecipeDetailFragment extends Fragment {
                     mItem = mSteps.get(position);
                     stepTxt.setText(mItem.getDescription());
                     releaseExoPlayer();
-                    initializePlayer(Uri.parse(mItem.getVideoURL()));
+                    placeExoPlayer();
+                    placeRecipeDescription();
+                    placeRecipeThumbnail();
                 }
             }
         });
@@ -125,15 +137,15 @@ public class RecipeDetailFragment extends Fragment {
                     mItem = mSteps.get(position);
                     stepTxt.setText(mItem.getDescription());
                     releaseExoPlayer();
-                    initializePlayer(Uri.parse(mItem.getVideoURL()));
+                    placeExoPlayer();
+                    placeRecipeDescription();
+                    placeRecipeThumbnail();
                 }
             }
         });
 
         return rootView;
     }
-
-
 
     private void initializePlayer(Uri videoURL) {
         if (simpleExoPlayer == null) {
@@ -148,17 +160,28 @@ public class RecipeDetailFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (Util.SDK_INT <= 23) {
+            releaseExoPlayer();
+        }
+    }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        releaseExoPlayer();
+    public void onStop() {
+        super.onStop();
+        if (Util.SDK_INT > 23) {
+            releaseExoPlayer();
+        }
     }
 
     private void releaseExoPlayer() {
-        simpleExoPlayer.stop();
-        simpleExoPlayer.release();
-        simpleExoPlayer = null;
+        if (simpleExoPlayer != null) {
+            simpleExoPlayer.stop();
+            simpleExoPlayer.release();
+            simpleExoPlayer = null;
+        }
     }
 
     @Override
@@ -182,7 +205,10 @@ public class RecipeDetailFragment extends Fragment {
         stepTxt.setVisibility(visibility);
         nextBtn.setVisibility(visibility);
         prevBtn.setVisibility(visibility);
-        getActivity().findViewById(R.id.detail_toolbar).setVisibility(visibility);
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.detail_toolbar);
+        if (toolbar != null) {
+            toolbar.setVisibility(visibility);
+        }
     }
 
     private void resizeVideo() {
@@ -196,5 +222,76 @@ public class RecipeDetailFragment extends Fragment {
         simpleExoPlayerView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
         simpleExoPlayerView.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
     }
+
+    private void showExoPlayer() {
+        simpleExoPlayerView.setAlpha(1);
+        noVideo.setVisibility(View.GONE);
+    }
+
+    private void hideExoPlayer() {
+        simpleExoPlayerView.setAlpha(0);
+        noVideo.setVisibility(View.VISIBLE);
+    }
+
+    private void placeExoPlayer () {
+        videoUrl = mItem.getVideoURL();
+        if (videoUrl != null && !videoUrl.equals("")) {
+            isVideo = isUrlVideo(videoUrl);
+            if (isVideo) {
+                initializePlayer(Uri.parse(mItem.getVideoURL()));
+                showExoPlayer();
+            }
+        } else {
+            hideExoPlayer();
+        }
+    }
+
+    private void placeRecipeDescription () {
+        stepTxt.setText(mItem.getDescription());
+    }
+
+    private void placeRecipeThumbnail () {
+        strThumbnailURL = mItem.getThumbnailURL();
+        if (strThumbnailURL == null || strThumbnailURL.equals("")) {
+            hideThumbnail();
+        } else {
+            isImage = isUrlThumbnailImage(strThumbnailURL);
+            if (isImage) {
+                Glide.with(getContext()).load(strThumbnailURL).into(thumbnail);
+                showThumbnail();
+            } else {
+                hideThumbnail();
+            }
+        }
+    }
+
+    private void hideThumbnail() {
+        thumbnail.setVisibility(View.GONE);
+    }
+
+    private void showThumbnail() {
+        thumbnail.setVisibility(View.VISIBLE);
+    }
+
+
+    public static boolean isUrlVideo(String url) {
+        String mimeType = URLConnection.guessContentTypeFromName(url);
+        boolean existMimeType = mimeType != null;
+        boolean mimeTypeIsVideo = mimeType.startsWith("video");
+        return existMimeType && mimeTypeIsVideo;
+    }
+
+    public static boolean isUrlThumbnailImage(String url) {
+        boolean existMimeType;
+        boolean mimeTypeIsImage = false;
+        String mimeType = URLConnection.guessContentTypeFromName(url);
+        existMimeType = mimeType != null;
+        if (existMimeType) {
+            mimeTypeIsImage = mimeType.startsWith("image");
+        }
+        return existMimeType && mimeTypeIsImage;
+    }
+
+
 
 }

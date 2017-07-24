@@ -19,6 +19,11 @@ android {
     }
 }
 
+repositories {
+    jcenter()
+}
+
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -42,6 +47,13 @@ dependencies {
     compile 'com.android.support:support-compat:25.3.1'
     compile 'com.github.bumptech.glide:glide:4.0.0-RC1'
     compile 'com.google.android.exoplayer:exoplayer:r2.4.0'
+
+    // Glide Dependencies
+    compile 'com.github.bumptech.glide:glide:4.0.0-RC0'
+    compile 'com.android.support:support-v4:25.3.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0-RC0'
+    // Picasso
+    compile 'com.squareup.picasso:picasso:2.5.2'
     testCompile 'junit:junit:4.12'
 
     //androidTestCompile 'com.android.support:support-annotations:25.3.1'

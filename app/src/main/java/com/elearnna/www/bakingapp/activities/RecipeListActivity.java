@@ -2,10 +2,12 @@ package com.elearnna.www.bakingapp.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NavUtils;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -142,7 +144,7 @@ public class RecipeListActivity extends AppCompatActivity {
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final List<Step> mValues;
-
+        private int selectedItem = 0;
         public SimpleItemRecyclerViewAdapter(List<Step> recipes) {
             mValues = recipes;
         }
@@ -165,10 +167,19 @@ public class RecipeListActivity extends AppCompatActivity {
                 holder.videoImage.setVisibility(View.VISIBLE);
             }
 
+            if(selectedItem == position){
+                // Just highlight the background
+                holder.itemView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.light_green));
+            }else{
+                holder.itemView.setBackgroundColor(Color.TRANSPARENT);
+            }
+            holder.itemView.setSelected(selectedItem == position);
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //Bundle arguments = new Bundle();
+                    notifyItemChanged(selectedItem);
+                    selectedItem = position;
+                    notifyItemChanged(selectedItem);
                     arguments.putParcelable(RecipeDetailFragment.ARG_ITEM_ID, holder.mItem);
                     arguments.putParcelableArrayList("stepsList", (ArrayList<? extends Parcelable>) mValues);
                     if (mTwoPane) {

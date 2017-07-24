@@ -10,5 +10,6 @@
     <color name="redish_brown">#662221</color>
     <color name="greenish">#BFD0D7</color>
     <color name="dark_green">#004D40</color>
+    <color name="light_green">#55004D40</color>
     <color name="transparent_black_bk">#CC000000</color>
 </resources>

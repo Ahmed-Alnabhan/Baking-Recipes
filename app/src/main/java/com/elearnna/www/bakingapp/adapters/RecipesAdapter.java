@@ -5,10 +5,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.elearnna.www.bakingapp.R;
 import com.elearnna.www.bakingapp.data.model.Recipe;
+import com.elearnna.www.bakingapp.fragments.RecipeDetailFragment;
 
 import java.util.List;
 
@@ -21,6 +25,9 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeVi
     private Context context;
     private List<Recipe> recipes;
     private RecipeAdapterClickListener recipeAdapterListener;
+    private String recipeImageUrl;
+    private boolean isImage;
+    private RequestOptions requestOptions;
 
     // Ingredient Adapter click listener
     public interface RecipeAdapterClickListener {
@@ -30,6 +37,8 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeVi
     // Constructor takes the click listener as a parameter
     public RecipesAdapter (RecipeAdapterClickListener listener) {
         this.recipeAdapterListener = listener;
+        requestOptions = new RequestOptions();
+        requestOptions.override(350, 427);
     }
 
     @Override
@@ -47,6 +56,14 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeVi
             holder.ingredientsCountTxt.setText(String.valueOf(recipe.getIngredients().size()));
             holder.stepsCountTxt.setText(String.valueOf(recipe.getSteps().size()));
             holder.servingsCountTxt.setText(String.valueOf(recipe.getServings()));
+            // Get recipe image
+            recipeImageUrl = recipe.getImage();
+            isImage = RecipeDetailFragment.isUrlThumbnailImage(recipeImageUrl);
+            if (recipeImageUrl != null && !recipe.equals("") && isImage) {
+                Glide.with(context).load(recipeImageUrl).apply(requestOptions).into(holder.recipeImage);
+            } else {
+                Glide.with(context).load(R.drawable.cake).apply(requestOptions).into(holder.recipeImage);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -66,6 +83,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeVi
         private TextView ingredientsCountTxt;
         private TextView stepsCountTxt;
         private TextView servingsCountTxt;
+        private ImageView recipeImage;
         public RecipeViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
@@ -73,6 +91,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeVi
             ingredientsCountTxt = (TextView) itemView.findViewById(R.id.tv_ingredients_count);
             stepsCountTxt = (TextView) itemView.findViewById(R.id.tv_steps_count);
             servingsCountTxt = (TextView) itemView.findViewById(R.id.tv_servings_count);
+            recipeImage = (ImageView) itemView.findViewById(R.id.recipe_image);
         }
 
         @Override
