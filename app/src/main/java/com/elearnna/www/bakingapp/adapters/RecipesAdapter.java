@@ -1,6 +1,7 @@
 package com.elearnna.www.bakingapp.adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,8 @@ import java.util.List;
 
 public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeViewHolder> {
     public static final String RECIPES_TAG = RecipesAdapter.class.getSimpleName();
+    public static final String PREF_RECIPE = "preferredRecipe";
+    public static final String PREF_RECIPE_ID = "recipeID";
     private Context context;
     private List<Recipe> recipes;
     private RecipeAdapterClickListener recipeAdapterListener;
@@ -98,6 +101,11 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeVi
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
             Recipe recipe = recipes.get(adapterPosition);
+            // Store preferred recipe
+            SharedPreferences preferredRecipe = context.getSharedPreferences(PREF_RECIPE, 0);
+            SharedPreferences.Editor editor = preferredRecipe.edit();
+            editor.putInt(PREF_RECIPE_ID, recipe.getId());
+            editor.commit();
             recipeAdapterListener.onClick(recipe);
         }
     }

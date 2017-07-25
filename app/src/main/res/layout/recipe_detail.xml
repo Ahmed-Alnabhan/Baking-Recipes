@@ -79,7 +79,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/navGuideline"
-        app:layout_constraintGuide_begin="517dp"
+        app:layout_constraintGuide_begin="514dp"
         android:orientation="horizontal"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />

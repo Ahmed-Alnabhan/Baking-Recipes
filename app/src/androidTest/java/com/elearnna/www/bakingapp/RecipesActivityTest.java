@@ -14,9 +14,11 @@ import org.junit.runner.RunWith;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
 
 /**
  * Created by Ahmed on 7/17/2017.
@@ -46,13 +48,13 @@ public class RecipesActivityTest {
 
         // Test the next button
         SystemClock.sleep(3000);
-        onView(withId(R.id.next_btn)).perform(click());
+        onView(allOf(withId(R.id.next_btn), isClickable())).perform(click());
 
         onView(withText(R.string.melt_step_3)).check(matches(isDisplayed()));
 
         // Test the previous button
         SystemClock.sleep(3000);
-        onView(withId(R.id.previous_btn)).perform(click());
+        onView(allOf(withId(R.id.previous_btn), isClickable())).perform(click());
 
         onView(withText(R.string.starting_prep)).check(matches(isDisplayed()));
     }

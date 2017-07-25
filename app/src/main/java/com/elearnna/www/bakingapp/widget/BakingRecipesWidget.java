@@ -14,16 +14,12 @@ import android.widget.RemoteViews;
 import com.elearnna.www.bakingapp.R;
 import com.elearnna.www.bakingapp.activities.RecipeListActivity;
 import com.elearnna.www.bakingapp.activities.RecipesActivity;
-import com.elearnna.www.bakingapp.data.model.Ingredient;
-
-import java.util.List;
 
 /**
  * Implementation of App Widget functionality.
  */
 public class BakingRecipesWidget extends AppWidgetProvider {
 
-    private List<Ingredient> ingredients;
     @RequiresApi(api = Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
