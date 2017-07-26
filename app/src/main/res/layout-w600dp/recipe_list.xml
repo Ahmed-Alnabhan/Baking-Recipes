@@ -1,7 +1,13 @@
-<android.support.constraint.ConstraintLayout
+<android.support.v4.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+<android.support.constraint.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <View android:layout_height="35dp"
@@ -168,3 +174,4 @@
         android:layout_marginEnd="@dimen/dimen_8_dp">
     </android.support.v7.widget.RecyclerView>
 </android.support.constraint.ConstraintLayout>
+</android.support.v4.widget.NestedScrollView>

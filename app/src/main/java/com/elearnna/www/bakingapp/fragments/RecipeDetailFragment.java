@@ -161,6 +161,22 @@ public class RecipeDetailFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        if (Util.SDK_INT > 23) {
+            initializePlayer(Uri.parse(mItem.getVideoURL()));
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if ((Util.SDK_INT <= 23 || simpleExoPlayer == null)) {
+            initializePlayer(Uri.parse(mItem.getVideoURL()));
+        }
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
         if (Util.SDK_INT <= 23) {

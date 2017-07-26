@@ -167,7 +167,7 @@ public class RecipeListActivity extends AppCompatActivity {
                 holder.videoImage.setVisibility(View.VISIBLE);
             }
 
-            if(selectedItem == position){
+            if(selectedItem == position && mTwoPane){
                 // Just highlight the background
                 holder.itemView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.light_green));
             }else{
